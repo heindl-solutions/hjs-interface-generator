@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="GetAutoCompletionSignature">
+<interface>
+<ic>
+<par name="OpName" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="Signature" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>get_param_names (OpName, InpObjPar, OutpObjPar, InpCtrlPar, OutpCtrlPar)</l>
+<l>Input := [InpObjPar, InpCtrlPar]</l>
+<l>if (Input = [])</l>
+<l>  Input := ''</l>
+<l>endif</l>
+<l>Input := sum(Input + ', ')</l>
+<l>tuple_regexp_replace (Input, ', $', '', Input)</l>
+<l>Signature := 'this.' + OpName + '= function (' + sum(Input) + ')'</l>
+<l>return ()</l>
+</body>
+<docu id="GetAutoCompletionSignature">
+<parameters>
+<parameter id="OpName"/>
+<parameter id="Signature"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

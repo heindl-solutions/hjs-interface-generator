@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="CloseOpNamesCpp">
+<interface>
+<ic>
+<par name="OpNamesFileHandle" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>fwrite_string (OpNamesFileHandle, '} // namespace HJS\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '\n')</l>
+<l>close_file (OpNamesFileHandle)</l>
+<l>return ()</l>
+</body>
+<docu id="CloseOpNamesCpp">
+<parameters>
+<parameter id="OpNamesFileHandle"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

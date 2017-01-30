@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="WriteNanMethods">
+<interface>
+<ic>
+<par name="OpName" base_type="ctrl" dimension="0"/>
+<par name="TotalIndex" base_type="ctrl" dimension="0"/>
+<par name="Dir" base_type="ctrl" dimension="0"/>
+<par name="OpNamesFileHandle" base_type="ctrl" dimension="0"/>
+<par name="OpNamesHeaderFileHandle" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>global tuple AsyncOpNames</l>
+<l>global tuple NanMethodLineTemplate</l>
+<l>global tuple NanMethodDeclarationLineTemplate</l>
+<l>global tuple HalconVersion</l>
+<l>Suffix := ''</l>
+<l>if (find(AsyncOpNames,OpName) # -1)</l>
+<c>    * additionally, write OPNAME_async methods</c>
+<l>    Suffix := [Suffix, '_async']</l>
+<l>endif</l>
+<l>for  IndexSuffix := 0 to |Suffix|-1 by 1</l>
+<l>    Line := '    ' + NanMethodLineTemplate</l>
+<l>    tuple_regexp_replace (Line, 'OPNAME', OpName, Line)</l>
+<l>    tuple_regexp_replace (Line, '{HALCONVERSION}', HalconVersion, Line)</l>
+<l>    tuple_regexp_replace (Line, 'INDEX', '' + TotalIndex, Line)</l>
+<l>    tuple_regexp_replace (Line, ['{ASYNCSUFFIX}','replace_all'], Suffix[IndexSuffix], Line)</l>
+<l>    fwrite_string(OpNamesFileHandle, Line + '\n')</l>
+<l>endfor</l>
+<l>* Line := '    ' + NanMethodDeclarationLineTemplate</l>
+<l>* tuple_regexp_replace (Line, 'OPNAME', OpName, Line)</l>
+<l>* fwrite_string(OpNamesHeaderFileHandle, Line + '\n')</l>
+<l>return ()</l>
+</body>
+<docu id="WriteNanMethods">
+<parameters>
+<parameter id="Dir"/>
+<parameter id="OpName"/>
+<parameter id="OpNamesFileHandle"/>
+<parameter id="OpNamesHeaderFileHandle"/>
+<parameter id="TotalIndex"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

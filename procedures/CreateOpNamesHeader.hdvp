@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="CreateOpNamesHeader">
+<interface>
+<ic>
+<par name="Dir" base_type="ctrl" dimension="0"/>
+<par name="Suffix" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="OpNamesHeaderFileHandle" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>global tuple OpNamesLineTemplate</l>
+<l>GetBanner (Banner, HalconVersion)</l>
+<l>OpNamesPath := Dir + '/halcon' + HalconVersion + Suffix + '.h'</l>
+<l>open_file (OpNamesPath, 'output', OpNamesHeaderFileHandle)</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, Banner + '\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '// halcon' + HalconVersion + Suffix + '.h\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '#ifndef HJS_HALCON' + HalconVersion + Suffix + '_H\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '#define HJS_HALCON' + HalconVersion + Suffix + '_H\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '#include &lt;string&gt;\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '#include &lt;map&gt;\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '#include &lt;nan.h&gt;\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '#include "opinfo.h"\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '#include "../call_operator.h"\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, 'namespace HJS {\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '    void export_halcon' + HalconVersion + '_operators' + Suffix + '(v8::Local&lt;v8::FunctionTemplate&gt;&amp; tpl);\n')</l>
+<l>* fwrite_string (OpNamesHeaderFileHandle, '    extern std::vector&lt;int&gt; operator_id; // filled at runtime\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '    extern const std::map&lt;int, OpInfo&gt; halcon_' + HalconVersion + '_opinfo' + Suffix + ';\n')</l>
+<l>return ()</l>
+</body>
+<docu id="CreateOpNamesHeader">
+<parameters>
+<parameter id="Dir"/>
+<parameter id="OpNamesHeaderFileHandle"/>
+<parameter id="Suffix"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="CloseOpNamesHeader">
+<interface>
+<ic>
+<par name="OpNamesHeaderFileHandle" base_type="ctrl" dimension="0"/>
+<par name="Suffix" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>GetBanner (Banner, HalconVersion)</l>
+<c></c>
+<l>fwrite_string (OpNamesHeaderFileHandle, '} // namespace HJS\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '#endif // HJS_HALCON' + HalconVersion + Suffix + '_H\n')</l>
+<l>fwrite_string (OpNamesHeaderFileHandle, '\n')</l>
+<l>close_file (OpNamesHeaderFileHandle)</l>
+<l>return ()</l>
+</body>
+<docu id="CloseOpNamesHeader">
+<parameters>
+<parameter id="OpNamesHeaderFileHandle"/>
+<parameter id="Suffix"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

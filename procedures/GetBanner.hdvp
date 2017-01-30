@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="GetBanner">
+<interface>
+<oc>
+<par name="Banner" base_type="ctrl" dimension="0"/>
+<par name="HalconVersion" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>GetDate (Image, Date)</l>
+<l>get_system ('library_fullname', LibraryFullname)</l>
+<l>get_system ('version', HalconVersion)</l>
+<l>tuple_regexp_replace (HalconVersion, ['\\.','replace_all'], '_', HalconVersion)</l>
+<l>Banner := ''</l>
+<l>Banner := Banner + '///////////////////////////////////////////////\n'</l>
+<l>Banner := Banner + '// created automatically by hjs-interface-generator.hdev, (C) Copyright 2016-2017 heindl-solutions.com.\n'</l>
+<l>Banner := Banner + '// Do not modify manually.\n'</l>
+<l>Banner := Banner + '// library: ' + LibraryFullname + '\n'</l>
+<l>Banner := Banner + '// created: ' + Date + '\n'</l>
+<l>Banner := Banner + '///////////////////////////////////////////////\n'</l>
+<l>return ()</l>
+</body>
+<docu id="GetBanner">
+<parameters>
+<parameter id="Banner"/>
+<parameter id="HalconVersion"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

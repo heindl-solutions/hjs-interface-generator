@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="CreateOpNamesAutoCompletion">
+<interface>
+<ic>
+<par name="Dir" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="OpNamesAutoCompletionFileHandle" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>GetBanner (Banner, HalconVersion)</l>
+<l>open_file (Dir + '/autocompletion_' + HalconVersion +'.js', 'output', OpNamesAutoCompletionFileHandle)</l>
+<l>fwrite_string (OpNamesAutoCompletionFileHandle, '_halcon_operators = new function () {\n')</l>
+<l>return ()</l>
+</body>
+<docu id="CreateOpNamesAutoCompletion">
+<parameters>
+<parameter id="Dir"/>
+<parameter id="OpNamesAutoCompletionFileHandle"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

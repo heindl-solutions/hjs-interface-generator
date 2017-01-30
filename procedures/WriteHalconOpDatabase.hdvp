@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="WriteHalconOpDatabase">
+<interface>
+<ic>
+<par name="OpName" base_type="ctrl" dimension="0"/>
+<par name="Index" base_type="ctrl" dimension="0"/>
+<par name="TotalIndex" base_type="ctrl" dimension="0"/>
+<par name="Dir" base_type="ctrl" dimension="0"/>
+<par name="OpNamesFileHandle" base_type="ctrl" dimension="0"/>
+<par name="OpNamesHeaderFileHandle" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>global tuple OpNamesLineTemplate</l>
+<l>global tuple NanMethodLineTemplate</l>
+<l>GenAsync (OpName, GenAsync)</l>
+<l>get_param_names (OpName, InpObjPars, OutpObjPars, InpCtrlPars, OutpCtrlPars)</l>
+<l>for IndexParam := 0 to |InpObjPars|-1 by 1</l>
+<l>  get_param_info (OpName, InpObjPars[IndexParam], 'sem_type', Information)</l>
+<l>endfor</l>
+<l>for IndexParam := 0 to |OutpObjPars|-1 by 1</l>
+<l>  get_param_info (OpName, OutpObjPars[IndexParam], 'sem_type', Information)</l>
+<l>endfor</l>
+<c>* ['CtrlRows', 'CtrlCols', 'Knots'] -&gt; "CtrlRows", "CtrlCols", "Knots"</c>
+<l>OutObjNamesCpp := sum('"' + OutpObjPars +'", ')</l>
+<l>if (OutObjNamesCpp = [])</l>
+<l>  OutObjNamesCpp := ''</l>
+<l>endif</l>
+<l>tuple_regexp_replace (OutObjNamesCpp, ', $', '', OutObjNamesCpp)</l>
+<c></c>
+<l>OutCtrlNamesCpp := sum('"' + OutpCtrlPars +'", ')</l>
+<l>if (OutCtrlNamesCpp = [])</l>
+<l>  OutCtrlNamesCpp := ''</l>
+<l>endif</l>
+<l>tuple_regexp_replace (OutCtrlNamesCpp, ', $', '', OutCtrlNamesCpp)</l>
+<l>IsFirst := Index == 0</l>
+<l>if (IsFirst)</l>
+<l>  Comma := ' '</l>
+<l>else</l>
+<l>  Comma := ','</l>
+<l>endif</l>
+<l>Line := '       ' + Comma + OpNamesLineTemplate</l>
+<l>tuple_regexp_replace (Line, 'OPNAME', OpName, Line)</l>
+<l>tuple_regexp_replace (Line, 'OPERATOR_INDEX', '' + TotalIndex, Line)</l>
+<l>tuple_regexp_replace (Line, 'NUM_IN_OBJS', ''+|InpObjPars|, Line)</l>
+<l>tuple_regexp_replace (Line, 'NUM_IN_CTRLS', ''+|InpCtrlPars|, Line)</l>
+<l>tuple_regexp_replace (Line, 'NUM_OUT_OBJS', ''+|OutpObjPars|, Line)</l>
+<l>tuple_regexp_replace (Line, 'NUM_OUT_CTRLS', ''+|OutpCtrlPars|, Line)</l>
+<l>tuple_regexp_replace (Line, 'OUT_OBJ_NAMES', ''+OutObjNamesCpp, Line)</l>
+<l>tuple_regexp_replace (Line, 'OUT_CTRL_NAMES', ''+OutCtrlNamesCpp, Line)</l>
+<l>fwrite_string(OpNamesFileHandle, Line + '\n')</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="WriteHalconOpDatabase">
+<parameters>
+<parameter id="Dir"/>
+<parameter id="Index"/>
+<parameter id="OpName"/>
+<parameter id="OpNamesFileHandle"/>
+<parameter id="OpNamesHeaderFileHandle"/>
+<parameter id="TotalIndex"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

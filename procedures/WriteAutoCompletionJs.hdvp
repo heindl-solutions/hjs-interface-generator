@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="WriteAutoCompletionJs">
+<interface>
+<ic>
+<par name="OpName" base_type="ctrl" dimension="0"/>
+<par name="IsLast" base_type="ctrl" dimension="0"/>
+<par name="OpNamesAutoCompletionFileHandle" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>SummaryTemplate  := '/// &lt;summary&gt;SUMMARY&lt;/summary&gt;'</l>
+<l>ParamTemplate    := '/// &lt;param name="PARAMNAME" type="TYPE" ELEMENTTYPE INTEGER&gt;PARAMDESC&lt;/param&gt;'</l>
+<c></c>
+<l>fh := OpNamesAutoCompletionFileHandle</l>
+<l>Indent := '    '</l>
+<l>Indent2 := Indent + Indent</l>
+<l>GetAutoCompletionSignature (OpName, Signature)</l>
+<l>fwrite_string (fh, Indent + Signature + ' {\n')</l>
+<c></c>
+<c>* https://msdn.microsoft.com/de-de/library/hh542720.aspx</c>
+<c></c>
+<l>get_operator_info (OpName, 'short', InfoShort)</l>
+<l>TidyInfo (InfoShort, InfoShort)</l>
+<l>Line := Indent2 + SummaryTemplate</l>
+<l>tuple_regexp_replace (Line, 'SUMMARY', InfoShort, Line)</l>
+<l>fwrite_string (fh, Line + '\n')</l>
+<c></c>
+<l>get_param_names (OpName, InpObjPar, OutpObjPar, InpCtrlPar, OutpCtrlPar)</l>
+<l>Input := [InpObjPar, InpCtrlPar]</l>
+<l>for Index := 0 to |Input|-1 by 1</l>
+<l>    ParamName := Input[Index]</l>
+<l>    Line := Indent2 + ParamTemplate</l>
+<l>    get_param_info (OpName, ParamName, 'description', InfoDescription)</l>
+<l>    TidyInfo (InfoDescription, InfoDescription)</l>
+<l>    InfoDescription := InfoDescription</l>
+<c>    </c>
+<l>    get_param_info (OpName, ParamName, 'multivalue', InfoMultivalue)  </l>
+<l>    get_param_info (OpName, ParamName, 'sem_type', InfoSemType)  </l>
+<l>    if (InfoSemType = [])</l>
+<l>        InfoSemType := ''</l>
+<l>    endif</l>
+<l>    MapSemtype (InfoSemType, SemTypeEcma, Integer)</l>
+<l>    get_param_info (OpName, ParamName, 'value_list', InfoValueList)</l>
+<l>*     stop ()</l>
+<c>    </c>
+<l>    DO_NOT_USE_THIS := false    // we do not use Type=Array, as then no semtype can be seen in VisualStudio at all but only 'Array'</l>
+<l>    if (DO_NOT_USE_THIS and InfoMultivalue = 'optional' or InfoMultivalue = 'true')</l>
+<l>        elementType := 'elementType="' + SemTypeEcma +'"'</l>
+<l>        Type := 'Array'</l>
+<l>    else</l>
+<l>        Type := SemTypeEcma</l>
+<l>        elementType := ''</l>
+<l>    endif</l>
+<l>*     stop ()</l>
+<l>    if (Integer # '')</l>
+<l>        Integer := 'integer="' + Integer + '"'</l>
+<l>    endif</l>
+<l>    tuple_regexp_replace (Line, 'INTEGER', Integer, Line)  </l>
+<c>    </c>
+<l>    tuple_regexp_replace (Line, 'PARAMNAME', ParamName, Line)</l>
+<l>    tuple_regexp_replace (Line, 'TYPE', Type, Line)</l>
+<l>    tuple_regexp_replace (Line, 'ELEMENTTYPE', elementType, Line)</l>
+<l>    tuple_regexp_replace (Line, 'PARAMDESC', InfoDescription, Line)</l>
+<l>    fwrite_string (fh, Line + '\n')</l>
+<l>endfor</l>
+<c>* Visual Studio crashes if this is enabled:</c>
+<l>* fwrite_string (fh, Indent2 + '/// &lt;returns type="Number"&gt;The area.&lt;/returns&gt;\n')</l>
+<l>if (IsLast)</l>
+<l>    fwrite_string (fh, Indent + '}\n')</l>
+<l>else</l>
+<l>    fwrite_string (fh, Indent + '},\n')</l>
+<l>endif</l>
+<l>* stop ()</l>
+<l>return ()</l>
+</body>
+<docu id="WriteAutoCompletionJs">
+<parameters>
+<parameter id="IsLast"/>
+<parameter id="OpName"/>
+<parameter id="OpNamesAutoCompletionFileHandle"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

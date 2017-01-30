@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="main">
+<interface/>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<c></c>
+<c>* note that this code lacks the actual implementation of the called functions.</c>
+<c>* Contact us at info@heindl-solutions.com if you are interested in a fully working</c>
+<c>* JavaScript interface for HALCON.</c>
+<c>*</c>
+<c>* license (GPLv3) and more information are available at</c>
+<c>* https://github.com/heindl-solutions/hjs-interface-generator</c>
+<c></c>
+<l>import './procedures'</l>
+<l>dev_update_off ()</l>
+<c>*** Setup BEGIN</c>
+<l>MaxInpObjPar := 0</l>
+<l>MaxOutpObjPar := 0</l>
+<l>MaxInpCtrlPar := 0</l>
+<l>MaxOutpCtrlPar := 0</l>
+<l>Dir := './operators'</l>
+<l>CppDir := Dir</l>
+<l>HeaderDir := Dir</l>
+<l>AutoCompletionDir := Dir</l>
+<l>RecursiveMakeDir (CppDir)</l>
+<l>RecursiveMakeDir (HeaderDir)</l>
+<l>RecursiveMakeDir (AutoCompletionDir)</l>
+<l>* NumPartsTotal := 10</l>
+<l>NumPartsTotal := 1</l>
+<c>*** Setup END</c>
+<c></c>
+<l>get_operator_name ('', OperatorNamesOrg)</l>
+<l>Part := 0</l>
+<l>Step := |OperatorNamesOrg|/NumPartsTotal</l>
+<l>O := []</l>
+<c>* We have to split all operators in chuncks such that the resulting .cpp and .h files</c>
+<c>* are small enough to be swallowed by Microsoft cl. Otherwise compilation with Microsoft CL in release mode takes</c>
+<c>* forever</c>
+<l>for IndexTotalBegin:= 0 to |OperatorNamesOrg|-1 by Step</l>
+<l>    Part := Part + 1</l>
+<l>    if (NumPartsTotal &gt; 1)</l>
+<l>        Suffix := '_' + Part</l>
+<l>        OperatorNames := OperatorNamesOrg[IndexTotalBegin : min2(IndexTotalBegin + Step - 1, |OperatorNamesOrg|-1)]</l>
+<l>    else</l>
+<l>        Suffix := ''</l>
+<l>        OperatorNames := OperatorNamesOrg</l>
+<l>    endif</l>
+<c>    </c>
+<l>    global tuple OpNamesLineTemplate</l>
+<l>    OpNamesLineTemplate := '{ OPERATOR_INDEX, { "OPNAME", NUM_IN_OBJS, NUM_IN_CTRLS, NUM_OUT_OBJS, NUM_OUT_CTRLS, { OUT_OBJ_NAMES },{ OUT_CTRL_NAMES } } }'</l>
+<l>    global tuple NanMethodLineTemplate</l>
+<l>    NanMethodLineTemplate := 'NAN_METHOD(OPNAME{ASYNCSUFFIX}) { call_halcon{HALCONVERSION}_operator{ASYNCSUFFIX}( info, INDEX ); }'</l>
+<l>    global tuple NanMethodDeclarationLineTemplate</l>
+<l>    NanMethodDeclarationLineTemplate := 'NAN_METHOD(OPNAME);'</l>
+<l>    global tuple NanExportLineTemplate</l>
+<l>    NanExportLineTemplate := 'EXP_HALCON_PROTO(tpl, OPNAME{ASYNCSUFFIX});'</l>
+<l>    global tuple HalconVersion</l>
+<l>    get_system ('version', HalconVersion)</l>
+<l>    tuple_regexp_replace (HalconVersion, ['\\.','replace_all'], '_', HalconVersion)</l>
+<c>    * Operators for which OPNAME_async methods will be created</c>
+<l>    global tuple AsyncOpNames</l>
+<l>*     AsyncOpNames := ['read_image','wait_seconds']</l>
+<l>    AsyncOpNames := []</l>
+<c>    </c>
+<l>    CreateOpNamesCpp (CppDir, |OperatorNames|, Suffix, OpNamesFileHandle)</l>
+<l>    CreateOpNamesHeader (HeaderDir, Suffix, OpNamesHeaderFileHandle)</l>
+<l>    for Index := 0 to |OperatorNames|-1 by 1</l>
+<l>        OpName := OperatorNames[Index]</l>
+<l>        WriteHalconOpDatabase (OpName, Index, Index + IndexTotalBegin, Dir, OpNamesFileHandle, OpNamesHeaderFileHandle)</l>
+<l>    endfor</l>
+<l>    fwrite_string (OpNamesFileHandle, '    };\n')</l>
+<l>    for Index := 0 to |OperatorNames|-1 by 1</l>
+<l>        OpName := OperatorNames[Index]</l>
+<l>        WriteNanMethods (OpName, Index + IndexTotalBegin, Dir, OpNamesFileHandle, OpNamesHeaderFileHandle)</l>
+<l>    endfor</l>
+<c>    </c>
+<l>    fwrite_string (OpNamesFileHandle, '\n')</l>
+<l>    fwrite_string (OpNamesFileHandle, '\n')</l>
+<l>    fwrite_string (OpNamesFileHandle, '    void export_halcon' + HalconVersion + '_operators' + Suffix + '(v8::Local&lt;v8::FunctionTemplate&gt;&amp; tpl) {\n')</l>
+<l>    fwrite_string (OpNamesFileHandle, '#define EXP_HALCON_PROTO(tpl, function) SetPrototypeMethod(tpl, #function, function)\n')</l>
+<l>    fwrite_string (OpNamesFileHandle, '\n')</l>
+<l>    for Index := 0 to |OperatorNames|-1 by 1</l>
+<l>        OpName := OperatorNames[Index]</l>
+<l>        WriteNanExports (OpName, Index, Dir, OpNamesFileHandle, OpNamesHeaderFileHandle)</l>
+<l>    endfor</l>
+<l>    fwrite_string (OpNamesFileHandle, '#undef EXP_HALCON_PROTO\n')</l>
+<l>    fwrite_string (OpNamesFileHandle, '    } // export_halcon' + HalconVersion + '_operators\n')</l>
+<l>    fwrite_string (OpNamesFileHandle, '\n')</l>
+<c>    </c>
+<l>    CloseOpNamesHeader (OpNamesHeaderFileHandle, Suffix)</l>
+<l>    CloseOpNamesCpp (OpNamesFileHandle)</l>
+<l>endfor</l>
+<c></c>
+<c>* Write auto completion code</c>
+<l>CreateOpNamesAutoCompletion (AutoCompletionDir, OpNamesAutoCompletionFileHandle)</l>
+<l>for Index := 0 to |OperatorNames|-1 by 1</l>
+<l>    OpName := OperatorNames[Index]</l>
+<l>    IsLast := Index = |OperatorNames|-1</l>
+<l>    WriteAutoCompletionJs (OpName, IsLast, OpNamesAutoCompletionFileHandle)</l>
+<l>endfor</l>
+<l>CloseOpNamesAutoCompletion (OpNamesAutoCompletionFileHandle)</l>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+</hdevelop>

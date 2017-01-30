@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="RecursiveMakeDir">
+<interface>
+<ic>
+<par name="AbsolutePath" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<c>* Recursive make_dir</c>
+<l>AbsolutePath := regexp_replace (AbsolutePath, '\\\\', '/')</l>
+<l>tuple_split (AbsolutePath, '/', SubPaths)</l>
+<l>for Index := 1 to |SubPaths|-1 by 1</l>
+<l>    SubPath := sum(SubPaths[0:Index]+'/')</l>
+<l>    file_exists (SubPath, FileExists)</l>
+<l>    if (not FileExists)</l>
+<l>        make_dir (SubPath)</l>
+<l>    endif</l>
+<l>endfor</l>
+<l>return ()</l>
+</body>
+<docu id="RecursiveMakeDir">
+<parameters>
+<parameter id="AbsolutePath"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

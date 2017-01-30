@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="MapSemtype">
+<interface>
+<ic>
+<par name="HalconSemType" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="SemTypeEcma" base_type="ctrl" dimension="0"/>
+<par name="Integer" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>SemTypeEcma := HalconSemType</l>
+<l>Integer := ''</l>
+<c></c>
+<l>if (HalconSemType = 'number')</l>
+<l>  SemTypeEcma := 'Number'</l>
+<l>  Integer := ''</l>
+<l>elseif (HalconSemType = 'integer')</l>
+<l>  SemTypeEcma := 'Number'</l>
+<l>  Integer := 'true'</l>
+<l>elseif (HalconSemType = 'real')</l>
+<l>  SemTypeEcma := 'Number'</l>
+<l>  Integer := 'false'</l>
+<l>elseif (HalconSemType = 'string')</l>
+<l>  SemTypeEcma := 'String'</l>
+<l>elseif (HalconSemType = 'string')</l>
+<l>  SemTypeEcma := 'String'</l>
+<l>endif</l>
+<l>return ()</l>
+</body>
+<docu id="MapSemtype">
+<parameters>
+<parameter id="HalconSemType"/>
+<parameter id="Integer"/>
+<parameter id="SemTypeEcma"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

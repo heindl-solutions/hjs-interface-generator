@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="GetDate">
+<interface>
+<oo>
+<par name="Image" base_type="iconic" dimension="0"/>
+</oo>
+<oc>
+<par name="Date" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>gen_image_const (Image, 'byte', 512, 512)</l>
+<l>get_image_time (Image, MSecond, Second, Minute, Hour, Day, YDay, Month, Year)</l>
+<l>if (Month &lt; 10)</l>
+<l>  Month := '0' + Month</l>
+<l>endif</l>
+<l>if (Day &lt; 10)</l>
+<l>  Day := '0' + Day</l>
+<l>endif</l>
+<l>if (Hour &lt; 10)</l>
+<l>  Hour := '0' + Hour</l>
+<l>endif</l>
+<l>if (Minute &lt; 10)</l>
+<l>  Minute := '0' + Minute</l>
+<l>endif</l>
+<l>if (Second &lt; 10)</l>
+<l>  Second := '0' + Second</l>
+<l>endif</l>
+<l>Date := Year + '-' + Month + '-' + Day + ' ' + Hour + ':' + Minute + ':' + Second</l>
+<l>return ()</l>
+</body>
+<docu id="GetDate">
+<parameters>
+<parameter id="Date"/>
+<parameter id="Image"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

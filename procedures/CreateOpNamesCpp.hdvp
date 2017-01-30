@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="CreateOpNamesCpp">
+<interface>
+<ic>
+<par name="Dir" base_type="ctrl" dimension="0"/>
+<par name="NumOperators" base_type="ctrl" dimension="0"/>
+<par name="Suffix" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="OpNamesFileHandle" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>global tuple OpNamesLineTemplate</l>
+<l>GetBanner (Banner, HalconVersion)</l>
+<l>OpNamesPath := Dir + '/halcon' + HalconVersion + Suffix + '.cpp'</l>
+<l>open_file (OpNamesPath, 'output', OpNamesFileHandle)</l>
+<l>fwrite_string (OpNamesFileHandle, Banner + '\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '// halcon' + HalconVersion + Suffix + '.cpp\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '#include "halcon' + HalconVersion + Suffix + '.h"\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '\n')</l>
+<l>if (true)</l>
+<c>  * ~~ maybe no longer needed since we split source files now ~~</c>
+<l>fwrite_string (OpNamesFileHandle, '#ifdef WIN32\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '// with optimizations turned on, the compiliation would take forever\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '#pragma auto_inline ( off )\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '#pragma inline_depth( 0 )\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '#pragma inline_recursion( off )\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '#pragma optimize( "", off )\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '#endif\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '\n')</l>
+<l>endif</l>
+<l>fwrite_string (OpNamesFileHandle, 'namespace HJS {\n')</l>
+<l>* fwrite_string (OpNamesFileHandle, '    std::vector&lt;int&gt; operator_id((size_t)'+NumOperators+'); // filled at runtime\n')</l>
+<l>fwrite_string (OpNamesFileHandle, '    const std::map&lt;int, OpInfo&gt; halcon_' + HalconVersion + '_opinfo' + Suffix + ' = {\n')</l>
+<l>CommentedOpNamesLineTemplate := '//      ' + OpNamesLineTemplate</l>
+<l>fwrite_string (OpNamesFileHandle, CommentedOpNamesLineTemplate +'\n')</l>
+<l>return ()</l>
+</body>
+<docu id="CreateOpNamesCpp">
+<parameters>
+<parameter id="Dir"/>
+<parameter id="NumOperators"/>
+<parameter id="OpNamesFileHandle"/>
+<parameter id="Suffix"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

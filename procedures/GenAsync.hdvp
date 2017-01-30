@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="GenAsync">
+<interface>
+<ic>
+<par name="OpName" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="GenAsync" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* hjs-interface-generator.hdev - Generate an example JavaScript interface for HALCON.</c>
+<c>* Copyright (C) 2017 Andreas Heindl heindl-solutions.com</c>
+<l>AsyncOps := [ \
+            'read_image' \
+            ]</l>
+<l>tuple_find (AsyncOps, OpName, Indices)</l>
+<l>if (Indices = -1)</l>
+<l>  GenAsync := false  </l>
+<l>  return ()</l>
+<l>endif</l>
+<l>GenAsync := true</l>
+<l>return ()</l>
+</body>
+<docu id="GenAsync">
+<parameters>
+<parameter id="GenAsync"/>
+<parameter id="OpName"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>
